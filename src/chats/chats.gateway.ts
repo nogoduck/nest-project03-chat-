@@ -16,7 +16,7 @@ export class ChatsGateway
 {
   private logger = new Logger('chat');
 
-  //최초실행
+  //최초실행(초기화)
   afterInit() {
     this.logger.log('init...');
   }
@@ -37,8 +37,18 @@ export class ChatsGateway
   ): string {
     console.log('username >> ', username);
     console.log('socket.id >> ', socket.id);
-    socket.emit('hello_user', `hello ${username}`);
+    socket.broadcast.emit('user_connected', username);
+    return username;
+  }
 
-    return 'hello socket';
+  @SubscribeMessage('submit_chat')
+  handleSubmitChat(
+    @MessageBody() chat: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    socket.broadcast.emit('new_chat', {
+      chat,
+      username: socket.id,
+    });
   }
 }
