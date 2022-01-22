@@ -2,6 +2,7 @@ import { Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ChatsModule } from './chats/chats.module';
 import * as mongoose from 'mongoose';
 
 @Module({
@@ -9,6 +10,7 @@ import * as mongoose from 'mongoose';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URI),
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [],
